@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from routers import auth, nutrition, user, workout
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
@@ -6,6 +7,7 @@ from psycopg2.extras import RealDictCursor
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 app = FastAPI()
@@ -131,7 +133,10 @@ async def get_history(operative_id: int):
         return cursor.fetchall()
     finally:
         conn.close()
-
+app.include_router(auth.router)      # Links your login/signup logic
+app.include_router(nutrition.router) # Links your AI fuel analysis
+app.include_router(user.router)      # Links vitals and HEALTH-CHECK
+app.include_router(workout.router)   # Links the Chamber AI
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
