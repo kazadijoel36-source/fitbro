@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vanguard OS | Command</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ffa3; --blue: #1e90ff; --danger: #ff4757;
+            --bg: #050505; --card: #0d0d0d; --border: #1a1a1a;
+        }
+
+        /* --- BRUTALIST BASE & DOT GRID --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--bg);
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 20px 20px; /* The Dot Grid */
+            color: white; font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden; padding-bottom: 120px;
+        }
+
+        /* --- SPLASH SCREEN --- */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .loader-bar { width: 200px; height: 2px; background: #111; margin-top: 20px; position: relative; }
+        #loader-fill { width: 0%; height: 100%; background: var(--primary); transition: 1.5s; }
+
+        /* --- NOTCHED CARD SYSTEM --- */
+        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
+        .card { 
+            background: var(--card); border: 1px solid var(--border);
+            padding: 20px; margin-bottom: 15px; position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 10%, 100% 100%, 5% 100%, 0 90%); /* Notched Corners */
+        }
+
+        .tag { font-size: 0.6rem; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        
+        /* --- XP & LEVEL --- */
+        .lvl-flex { display: flex; justify-content: space-between; align-items: baseline; }
+        .lvl-num { font-family: 'Archivo Black'; color: var(--primary); font-size: 1.4rem; }
+        .xp-bar-bg { width: 100%; height: 4px; background: #111; margin-top: 10px; }
+        #xp-fill { height: 100%; background: var(--primary); width: 0%; transition: 1s; box-shadow: 0 0 10px var(--primary); }
+
+        /* --- TRIPLE RING SVG --- */
+        .ring-box { position: relative; width: 200px; height: 200px; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        circle { fill: transparent; stroke-width: 8; stroke-linecap: round; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ring-steps { stroke: var(--primary); stroke-dasharray: 283; stroke-dashoffset: 283; }
+        .ring-kcal { stroke: var(--danger); stroke-dasharray: 220; stroke-dashoffset: 220; }
+        .ring-water { stroke: var(--blue); stroke-dasharray: 157; stroke-dashoffset: 157; }
+        .center-data { position: absolute; text-align: center; }
+        .center-val { font-family: 'Archivo Black'; font-size: 1.5rem; display: block; }
+
+        /* --- BIO-HAZARD ALERT --- */
+        .bio-hazard { 
+            border: 1px solid var(--danger); background: rgba(255, 71, 87, 0.1); 
+            color: var(--danger); font-size: 0.7rem; padding: 10px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px; font-weight: bold;
+        }
+
+        /* --- STATS GRID --- */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .stat-box { text-align: center; }
+        .stat-b { font-family: 'Archivo Black'; font-size: 1.1rem; display: block; }
+
+        /* --- NAVIGATION DOCK --- */
+        .nav-dock { 
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: rgba(13,13,13,0.9);
+            border: 1px solid var(--border); border-radius: 40px; padding: 12px;
+            display: flex; justify-content: space-around; backdrop-filter: blur(10px); z-index: 1000;
+        }
+        .nav-link { text-decoration: none; text-align: center; color: #444; font-size: 0.6rem; transition: 0.3s; }
+        .nav-link span { display: block; font-size: 1.4rem; margin-bottom: 4px; filter: grayscale(1); }
+        .nav-link.active { color: var(--primary); }
+        .nav-link.active span { filter: grayscale(0); transform: translateY(-5px); }
+
+        .btn-add { 
+            background: var(--blue); border: none; color: white; padding: 10px; 
+            font-family: 'Archivo Black'; width: 100%; margin-top: 10px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash">
+        <h1 style="font-family:'Archivo Black'; letter-spacing:8px; color:var(--primary)">VANGUARD</h1>
+        <div class="loader-bar"><div id="loader-fill"></div></div>
+    </div>
+
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+            <div>
+                <span class="tag" id="op-id">OPERATIVE_LINK_AWAITING</span>
+                <h2 style="font-family:'Archivo Black';">VANGUARD <span style="color:var(--primary)">OS</span></h2>
+            </div>
+            <div style="color:var(--primary); font-size:0.7rem; text-align:right;">
+                TRIAL: <span id="trial-days">14</span> DAYS<br>
+                <span style="color:#555">R50/MO PENDING</span>
+            </div>
+        </div>
+
+        <div class="bio-hazard">
+            <span>⚠️</span> BIO-HAZARD DETECTED: LACTOSE_INTOLERANCE_ACTIVE
+        </div>
+
+        <div class="card">
+            <div class="lvl-flex">
+                <span class="lvl-num" id="lvl-display">LVL 1</span>
+                <span id="xp-display" style="font-size:0.8rem">400 XP</span>
+            </div>
+            <div class="xp-bar-bg"><div id="xp-fill"></div></div>
+        </div>
+
+        <div class="card" style="text-align:center;">
+            <span class="tag">System_Biometrics</span>
+            <div class="ring-box">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="#111" />
+                    <circle id="r-steps" class="ring-steps" cx="50" cy="50" r="45" />
+                    <circle cx="50" cy="50" r="35" stroke="#111" />
+                    <circle id="r-kcal" class="ring-kcal" cx="50" cy="50" r="35" />
+                    <circle cx="50" cy="50" r="25" stroke="#111" />
+                    <circle id="r-water" class="ring-water" cx="50" cy="50" r="25" />
+                </svg>
+                <div class="center-data">
+                    <span class="center-val" id="step-count">0</span>
+                    <span class="tag" style="margin:0">STEPS</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box"><span class="tag" style="color:var(--danger)">KCAL</span><span class="stat-b">0</span></div>
+                <div class="stat-box"><span class="tag" style="color:var(--blue)">WATER</span><span id="water-stat" class="stat-b">0</span></div>
+                <div class="stat-box"><span class="tag" style="color:var(--primary)">STREAK</span><span class="stat-b">0d</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="tag">Target_84KG_Objective</span>
+            <div class="stats-grid">
+                <div class="stat-box"><span class="tag">CURRENT</span><span class="stat-b" id="curr-w">--</span></div>
+                <div class="stat-box"><span class="tag">GOAL</span><span class="stat-b">84.0</span></div>
+                <div class="stat-box"><span class="tag" style="color:var(--danger)">REMAIN</span><span class="stat-b" id="rem-w" style="color:var(--danger)">--</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="tag">Liquid_Resources</span>
+            <h2 id="h2o-main" style="font-family:'Archivo Black'; font-size:2rem;">0<span style="font-size:1rem; color:#444">ml</span></h2>
+            <button class="btn-add" onclick="addWater()">+ 250ML QUICK_LOG</button>
+        </div>
+
+        <div class="card">
+            <span class="tag">Daily_Missions</span>
+            <div style="font-size:0.7rem; line-height:2;">
+                <div id="m1">[ ] HYDRATION_TARGET</div>
+                <div id="m2">[ ] KINETIC_ENERGY_OUTPUT</div>
+                <div id="m3">[ ] NUTRITION_VAULT_SYNC</div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-dock">
+        <a href="#" class="nav-link active"><span>🏠</span>HOME</a>
+        <a href="chamber.html" class="nav-link"><span>⚔️</span>CHAMBER</a>
+        <a href="fuel.html" class="nav-link"><span>🥗</span>FUEL</a>
+        <a href="medals.html" class="nav-link"><span>🎖️</span>MEDALS</a>
+    </nav>
+
+    <script>
+        let water = 0;
+        const GOAL_WATER = 3000;
+
+        async function syncOS() {
+            try {
+                const res = await fetch('http://127.0.0.1:8000/vitals/1');
+                const data = await res.json();
+
+                // 1. Identity
+                document.getElementById('op-id').innerText = data.codename.toUpperCase();
+                document.getElementById('xp-display').innerText = data.xp + " XP";
+                document.getElementById('xp-fill').style.width = (data.xp % 1000 / 10) + "%";
+                document.getElementById('lvl-display').innerText = "LVL " + (Math.floor(data.xp / 1000) + 1);
+
+                // 2. Weight
+                const curr = parseFloat(data.current);
+                const rem = (curr - 84.0).toFixed(1);
+                document.getElementById('curr-w').innerText = curr;
+                document.getElementById('rem-w').innerText = rem;
+
+                // 3. Rings Logic
+                updateRing('r-water', water, GOAL_WATER, 157);
+            } catch (e) { console.log("OFFLINE_SYNC_MODE"); }
+        }
+
+        function updateRing(id, val, target, offsetMax) {
+            const ring = document.getElementById(id);
+            const pct = Math.min(val / target, 1);
+            ring.style.strokeDashoffset = offsetMax - (pct * offsetMax);
+        }
+
+        function addWater() {
+            water += 250;
+            document.getElementById('h2o-main').innerHTML = `${water}<span style="font-size:1rem; color:#444">ml</span>`;
+            document.getElementById('water-stat').innerText = water;
+            updateRing('r-water', water, GOAL_WATER, 157);
+            if (navigator.vibrate) navigator.vibrate(20);
+            if (water >= 2000) document.getElementById('m1').innerText = "[X] HYDRATION_TARGET_ACQUIRED";
+        }
+
+        window.onload = () => {
+            document.getElementById('loader-fill').style.width = "100%";
+            setTimeout(() => {
+                document.getElementById('splash').style.transform = "translateY(-100%)";
+                syncOS();
+            }, 1600);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard OS | Tactical Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00ffa3; --bg: #050505; --card: #0a0a0a; --gray: #444; }
+        body { background: var(--bg); color: white; font-family: 'JetBrains Mono', monospace; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        .progress-container { width: 90%; max-width: 400px; height: 6px; background: #111; margin: 40px 0; border-radius: 10px; overflow: hidden; border: 1px solid #222; }
+        #progress-fill { height: 100%; background: var(--primary); width: 5%; transition: 0.4s; box-shadow: 0 0 15px var(--primary); }
+        .onboard-frame { width: 90%; max-width: 500px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { font-family: 'Archivo Black'; font-size: 1.4rem; margin-bottom: 25px; text-transform: uppercase; line-height: 1.2; }
+        input { background: #000; border: 1px solid var(--gray); color: var(--primary); padding: 15px; width: 100%; border-radius: 12px; font-size: 1.2rem; text-align: center; margin-bottom: 20px; box-sizing: border-box; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .opt-btn { background: var(--card); border: 1px solid #222; color: white; padding: 15px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
+        .opt-btn:hover { border-color: var(--primary); }
+        .opt-btn:active { background: var(--primary); color: #000; }
+        #xp-toast { position: fixed; top: 20px; background: rgba(0, 255, 163, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 10px 20px; border-radius: 20px; font-size: 0.7rem; opacity: 0; transition: 0.3s; z-index: 100; }
+        #xp-toast.show { opacity: 1; top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="xp-toast">BIOLOGICAL_DATA_SYNCED: +15 XP</div>
+    <div class="progress-container"><div id="progress-fill"></div></div>
+
+    <div class="onboard-frame" id="form-container">
+        </div>
+
+    <script>
+        const questions = [
+            // Cluster 1: Hardware Specs
+            { id: "username", q: "INITIALIZE_CODENAME", type: "text", cluster: "IDENTITY" },
+            { id: "current_mass", q: "CURRENT_MASS (KG)", type: "number", cluster: "HARDWARE" },
+            { id: "target_mass", q: "TARGET_OBJECTIVE (KG)", type: "number", cluster: "HARDWARE" },
+            { id: "height", q: "VERTICAL_STAT (CM)", type: "number", cluster: "HARDWARE" },
+            { id: "age", q: "CHRONOLOGICAL_AGE", type: "number", cluster: "HARDWARE" },
+            { id: "sex", q: "BIOLOGICAL_SEX", type: "select", options: ["MALE", "FEMALE", "OTHER"], cluster: "HARDWARE" },
+            // Cluster 2: Tactical History
+            { id: "grade", q: "TRAINING_GRADE", type: "select", options: ["RECRUIT", "SOLDIER", "ELITE"], cluster: "TACTICAL" },
+            { id: "pushups", q: "PUSH-UP_MAX_REPS", type: "number", cluster: "TACTICAL" },
+            { id: "pullups", q: "PULL-UP_MAX_REPS", type: "number", cluster: "TACTICAL" },
+            { id: "steps", q: "DAILY_STEP_BASELINE", type: "number", cluster: "TACTICAL" },
+            { id: "injury", q: "SYSTEM_DAMAGE (INJURIES?)", type: "select", options: ["NONE", "MINOR", "MAJOR"], cluster: "TACTICAL" },
+            // Cluster 3: Fuel Logistics
+            { id: "lactose", q: "BIOLOGICAL_HAZARD: LACTOSE?", type: "select", options: ["YES", "NO"], cluster: "FUEL" },
+            { id: "diet", q: "DIETARY_PROTOCOL", type: "select", options: ["OMNIVORE", "VEGAN", "KETO"], cluster: "FUEL" },
+            { id: "cooking", q: "COOKING_FREQUENCY", type: "select", options: ["DAILY", "SOMETIMES", "NEVER"], cluster: "FUEL" },
+            { id: "water", q: "WATER_INTAKE (LITERS)", type: "number", cluster: "FUEL" },
+            { id: "source", q: "PRIMARY_FUEL_SOURCE", type: "select", options: ["WHOLE_FOODS", "SUPPLEMENTS", "MIXED"], cluster: "FUEL" },
+            // Cluster 4: Psych-Scan
+            { id: "why", q: "PRIMARY_DRIVE (THE_WHY)", type: "text", cluster: "PSYCH" },
+            { id: "discipline", q: "DISCIPLINE_LEVEL (1-10)", type: "number", cluster: "PSYCH" },
+            { id: "obstacle", q: "BIGGEST_OBSTACLE", type: "text", cluster: "PSYCH" },
+            { id: "gear", q: "ARSENAL_INVENTORY", type: "select", options: ["BODYWEIGHT", "DUMBBELLS", "FULL_GYM"], cluster: "PSYCH" }
+        ];
+
+        let currentStep = 0;
+        let responses = {};
+
+        function renderStep() {
+            const container = document.getElementById('form-container');
+            const data = questions[currentStep];
+            let inputHtml = '';
+
+            if (data.type === "text" || data.type === "number") {
+                inputHtml = `<input type="${data.type}" id="input-${data.id}" placeholder="Type here...">
+                             <button class="opt-btn" style="width:100%" onclick="saveAndNext()">NEXT_SYNC</button>`;
+            } else if (data.type === "select") {
+                inputHtml = `<div class="options-grid">
+                    ${data.options.map(opt => `<button class="opt-btn" onclick="saveAndNext('${opt}')">${opt}</button>`).join('')}
+                </div>`;
+            }
+
+            container.innerHTML = `
+                <div class="step active">
+                    <span style="color:var(--primary); font-size: 0.6rem; letter-spacing: 2px;">${currentStep + 1}/20 // ${data.cluster}</span>
+                    <h2>${data.q}</h2>
+                    ${inputHtml}
+                </div>
+            `;
+            
+            document.getElementById('progress-fill').style.width = `${((currentStep + 1) / questions.length) * 100}%`;
+        }
+
+        function saveAndNext(val) {
+            const data = questions[currentStep];
+            responses[data.id] = val || document.getElementById(`input-${data.id}`).value;
+            
+            if (navigator.vibrate) navigator.vibrate(15);
+            
+            if (currentStep % 5 === 0 && currentStep !== 0) {
+                const toast = document.getElementById('xp-toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }
+
+            if (currentStep < questions.length - 1) {
+                currentStep++;
+                renderStep();
+            } else {
+                submitData();
+            }
+        }
+
+        async function submitData() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(responses)
+                });
+                if (response.ok) window.location.href = 'dashboard.html';
+            } catch (err) {
+                alert("SYNC_FAILED: CHECK_DATABASE_CONNECTION");
+            }
+        }
+
+        renderStep();
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard OS | Fuel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <span class="tag">Sector_02: Resource_Intake</span>
+    <h2>Nutrition <span>Vault</span></h2>
+
+    <div class="card" style="border-color: var(--danger); background: rgba(255,71,87,0.15);">
+        <span class="tag" style="color:var(--danger)">Bio-Hazard_Alert</span>
+        <p style="color:var(--danger); font-size: 0.75rem; font-weight: bold; line-height: 1.4;">
+            LACTOSE_INTOLERANCE_ACTIVE. <br>
+            DAIRY_FUEL_IS_PROHIBITED_FOR_OPERATIVE_01.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">Fuel_Sync_Input</span>
+        <input type="text" id="food-input" placeholder="ENTER_MEAL (e.g. Jollof rice and chicken)">
+        <button class="btn-execute" onclick="syncFuel()">SYNC_TO_VAULT</button>
+    </div>
+
+    <div class="card">
+        <span class="tag">Active_Metabolism</span>
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 0.8rem;">DAILY_ALLOWANCE</span>
+            <span style="font-family: 'Archivo Black'; color: var(--blue);">2800 CAL</span>
+        </div>
+    </div>
+
+    <nav class="nav-dock">
+        <a href="dashboard.html" class="nav-link"><span>🏠</span>HOME</a>
+        <a href="chamber.html" class="nav-link"><span>⚔️</span>CHAMBER</a>
+        <a href="fuel.html" class="nav-link active"><span>🥗</span>FUEL</a>
+        <a href="medals.html" class="nav-link"><span>🎖️</span>MEDALS</a>
+    </nav>
+
+    <script>
+        async function syncFuel() {
+            const food = document.getElementById('food-input').value;
+            if(!food) return alert("INPUT_REQUIRED");
+
+            try {
+                // This matches the /ai-log route in your Python file
+                const res = await fetch(`http://127.0.0.1:8000/ai-log?user_id=1&food_input=${encodeURIComponent(food)}`, { method: 'POST' });
+                
+                if(res.ok) {
+                    alert("FUEL_RECORD_STORED");
+                    document.getElementById('food-input').value = "";
+                } else {
+                    alert("SYNC_FAILURE_404");
+                }
+            } catch (e) {
+                alert("SYSTEM_OFFLINE");
+            }
+        }
+    </script>
+</body>
+</html>

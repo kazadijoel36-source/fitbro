@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard OS | Chamber</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <span class="tag">Sector_01: Physical_Conditioning</span>
+    <h2>The <span>Chamber</span></h2>
+
+    <div class="card" style="margin-top:20px;">
+        <span class="tag">Mission_Parameters</span>
+        <div style="display: flex; gap: 10px;">
+            <select id="dur"><option value="15">15 MIN</option><option value="30">30 MIN</option></select>
+            <select id="foc"><option value="STRENGTH">STRENGTH</option><option value="CARDIO">CARDIO</option></select>
+        </div>
+        <button class="btn-execute" id="generate-btn" onclick="initiateGeneration()">EXECUTE_GENERATION</button>
+    </div>
+
+    <div class="card">
+        <span class="tag">Neural_Link_Status</span>
+        <div id="hud-status" style="color:var(--primary); font-weight:bold; font-size: 0.8rem;">AWAITING_LINK...</div>
+    </div>
+
+    <div id="task-list"></div>
+
+    <nav class="nav-dock">
+        <a href="dashboard.html" class="nav-link"><span>🏠</span>HOME</a>
+        <a href="chamber.html" class="nav-link active"><span>⚔️</span>CHAMBER</a>
+        <a href="fuel.html" class="nav-link"><span>🥗</span>FUEL</a>
+        <a href="medals.html" class="nav-link"><span>🎖️</span>MEDALS</a>
+    </nav>
+
+    <script src="chamber-ai.js"></script>
+    <script src="chamber-tracker.js"></script>
+    <script>
+        // Set local storage for the session if not present
+        if(!localStorage.getItem('fitbro_user_id')) localStorage.setItem('fitbro_user_id', '1');
+        
+        function logTerminal(msg) {
+            document.getElementById('hud-status').innerText = msg;
+        }
+    </script>
+</body>
+</html>

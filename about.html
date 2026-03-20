@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest.json">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vanguard">
+    <meta charset="UTF-8">
+    <title>FitBro OS | Operational Intelligence</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Plus+Jakarta+Sans:wght@300;400;800&display=swap" rel="stylesheet">
+    <style>
+        .intel-section { padding: 100px 8%; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .blueprint-img { border: 1px solid var(--primary); padding: 20px; background: rgba(0,255,163,0.02); border-radius: 20px; position: relative; }
+        .blueprint-img::after { content: "TOP_SECRET // VANGUARD_CORE"; position: absolute; top: -10px; right: 20px; background: var(--primary); color: #000; font-size: 0.6rem; padding: 2px 10px; font-weight: 800; }
+        .leader-line { height: 1px; background: linear-gradient(90deg, var(--primary), transparent); margin: 20px 0; position: relative; }
+        .leader-line::before { content: ""; position: absolute; left: 0; top: -4px; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <nav>
+        <a href="index.html" class="logo">FIT<span>BRO</span></a>
+        <div class="nav-links">
+            <a href="index.html">Start</a><a href="chamber.html">Chamber</a><a href="medals.html">Medals</a><a href="about.html" style="color:var(--primary)">About Us</a><a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <section class="intel-section" style="padding-top: 200px;">
+        <div>
+            <h1 class="hero-title">THE <br><span>FOUNDER'S</span> STORY.</h1>
+            <p style="color:var(--gray); margin: 30px 0; line-height: 1.8; font-weight: 600;">
+                FitBro OS wasn't born in a typical tech incubator. It was forged out of necessity by <b style="color:var(--primary);">Joel Kazadi</b>, an IT operative who realized that fitness "apps" were failing the most important metric: **Functional Scalability.**
+            </p>
+            <div class="leader-line"></div>
+            <p style="color:var(--white); font-weight: 800; font-size: 1.2rem;">THE MISSION: To bridge the gap between high-level IT logic and pure physical hypertrophy.</p>
+        </div>
+        <div class="blueprint-img">
+            <h4 style="color:var(--primary); margin-bottom: 20px;">SYSTEM ARCHITECTURE</h4>
+            <div style="font-family:monospace; font-size:0.8rem; color:#444;">
+                > INITIALIZING BIOMETRIC SCAN... [OK]<br>
+                > CALIBRATING ARSENAL_LOGIC... [OK]<br>
+                > SYNCING NEURAL_DRIVE... [OK]<br><br>
+                <span style="color:var(--primary);">[ ANALYSIS ]</span><br>
+                The OS uses a recursive algorithm to scale your onboarding baselines into dynamic rep-ranges. Every mission in the Chamber is unique to your current biometrics.
+            </div>
+        </div>
+    </section>
+
+    <div class="metric-marquee" style="background: var(--primary); transform: rotate(1deg);">
+        <div class="marquee-inner">
+            <span>• DATA DRIVEN PERFORMANCE • 100% LACTOSE-FREE LOGISTICS • VANGUARD CERTIFIED • NO TEMPLATES • NO LIMITS • </span>
+        </div>
+    </div>
+
+    <section class="intel-section">
+        <div class="card">
+            <h3 style="color:var(--primary);">WHY VANGUARD?</h3>
+            <p style="color:var(--gray); font-size: 0.9rem; line-height: 1.6;">
+                Most fitness trackers treat you like a static data point. FitBro OS treats you like an operative. By locking in your **Lactose Intolerance** as a system hazard and your **Arsenal Inventory** as mission hardware, we create a specialized environment where failure is not a programmed variable.
+            </p>
+        </div>
+        <div>
+            <h2 style="font-size: 3rem;">TECHNICAL <span style="color:var(--primary)">SPECS</span></h2>
+            <div class="leader-line"></div>
+            <ul style="list-style:none; padding:0; font-family:monospace; color:var(--gray);">
+                <li style="margin-bottom:15px;"><b style="color:#fff;">[01] NEURAL LINK:</b> AI-driven hypertrophy windows.</li>
+                <li style="margin-bottom:15px;"><b style="color:#fff;">[02] ARSENAL SCAN:</b> 100% gear-aware training drills.</li>
+                <li style="margin-bottom:15px;"><b style="color:#fff;">[03] VAULT ENCRYPTION:</b> Secure logging of fuel logistics.</li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="gamify.js"></script>
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const c = document.getElementById('custom-cursor');
+            c.style.left = e.clientX + 'px';
+            c.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

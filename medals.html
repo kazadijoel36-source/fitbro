@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Vanguard OS | Medal Cabinet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body style="padding-bottom: 100px; background: #000;">
+    <div class="app-container" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+        <span class="mono-tag">Module_03 // Achievements</span>
+        <h1 style="font-family:'Archivo Black'; font-size: 2rem;">MEDAL <span style="color:var(--primary)">ARRAY</span></h1>
+
+        <div id="cabinet" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
+            </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item"><span>🏠</span><small>Home</small></a>
+        <a href="chamber.html" class="nav-item"><span>⚔️</span><small>Chamber</small></a>
+        <a href="nutrition.html" class="nav-item"><span>🥗</span><small>Fuel</small></a>
+        <a href="medals.html" class="nav-item active"><span>🎖️</span><small>Medals</small></a>
+    </div>
+
+    <script src="medals-data.js"></script>
+    <script src="medals-checker.js"></script>
+</body>
+<body class="vanguard-theme">
+    <span class="tag">Sector_03: Achievement_Log</span>
+    <h2 style="margin-bottom:20px;">Operational <span style="color:var(--primary)">Medals</span></h2>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+        <div class="card" style="text-align:center;">
+            <span style="font-size:2rem; display:block; margin-bottom:10px;">🎖️</span>
+            <span class="tag">System_Init</span>
+        </div>
+        <div class="card" style="text-align:center; opacity:0.3;">
+            <span style="font-size:2rem; display:block; margin-bottom:10px;">🔥</span>
+            <span class="tag">7_Day_Streak</span>
+        </div>
+    </div>
+
+    <nav class="nav-dock">
+        <a href="dashboard.html" class="nav-link"><span>🏠</span>HOME</a>
+        <a href="chamber.html" class="nav-link"><span>⚔️</span>CHAMBER</a>
+        <a href="fuel.html" class="nav-link"><span>🥗</span>FUEL</a>
+        <a href="medals.html" class="nav-link active"><span>🎖️</span>MEDALS</a>
+    </nav>
+</body>
+</html>
