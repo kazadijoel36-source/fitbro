@@ -1,4 +1,7 @@
-const API_BASE = "http://127.0.0.1:8000";
+// SMART_URL_DETECTION
+const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:8000" 
+    : "https://fitbro-os.onrender.com";
 
 async function initiateGeneration() {
     const userId = localStorage.getItem('fitbro_user_id') || "1";
@@ -15,7 +18,7 @@ async function initiateGeneration() {
         const dur = document.getElementById('dur').value;
         const foc = document.getElementById('foc').value;
         
-        // Using your local Python server
+        // Dynamic URL usage
         const res = await fetch(`${API_BASE}/generate-workout/${userId}?duration=${dur}&focus=${foc}`);
         const data = await res.json();
         

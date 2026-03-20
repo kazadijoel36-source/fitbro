@@ -1,3 +1,8 @@
+// Ensure API_BASE is defined globally or shared
+const API_BASE_TRACKER = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:8000" 
+    : "https://fitbro-os.onrender.com";
+
 function displayTasks(workoutText) {
     const list = document.getElementById('task-list');
     const exercises = workoutText.split('\n').filter(line => line.length > 5);
@@ -31,11 +36,12 @@ async function uploadMission() {
     const userId = localStorage.getItem('fitbro_user_id');
     logTerminal("UPLOADING_TO_VAULT...");
     
-    // Granting Mission XP via the nutrition log endpoint for now (shortcut to grant XP)
-    // Change this line:
-await fetch(`${API_BASE}/ai-log?user_id=${userId}&food_input=COMPLETED_CHAMBER_SESSION`, {method:'POST'});
-    
-    setTimeout(() => {
-        window.location.href = 'dashboard.html';
-    }, 1000);
+    try {
+        await fetch(`${API_BASE_TRACKER}/ai-log?user_id=${userId}&food_input=COMPLETED_CHAMBER_SESSION`, {method:'POST'});
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1000);
+    } catch (e) {
+        logTerminal("UPLOAD_FAILED");
+    }
 }
