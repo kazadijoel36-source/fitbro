@@ -1,33 +1,42 @@
-const VITALS_API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://127.0.0.1:8000" 
-    : "https://fitbro-os.onrender.com";
+// VANGUARD_VITAL_MONITOR_CORE
+const VITALS_API = window.location.hostname.includes("render.com") 
+    ? "https://fitbro-os.onrender.com" 
+    : "http://127.0.0.1:8000";
 
-async function checkSystemHealth() {
-    try {
-        const res = await fetch(`${VITALS_API}/health-check`);
-        const data = await res.json();
-        const statusTag = document.getElementById('u-email');
-        if (data.status === "ONLINE" && statusTag) {
-            statusTag.style.borderLeft = "4px solid var(--primary)";
-        }
-    } catch (e) { console.error("> BACKEND_OFFLINE"); }
-}
-
-async function updateVitals() {
+async function refreshAll() {
     const userId = localStorage.getItem('fitbro_user_id') || "1";
+    
     try {
         const res = await fetch(`${VITALS_API}/vitals/${userId}`);
+        if (!res.ok) throw new Error("LINK_FAILED");
+        
         const v = await res.json();
 
-        const nameLabel = document.getElementById('u-email');
+        // 1. Target UI Elements
+        const opName = document.getElementById('op-id');
         const lvlLabel = document.getElementById('lvl-display');
-        const xpBar = document.getElementById('xp-bar');
+        const xpText = document.getElementById('xp-display');
+        const xpBar = document.getElementById('xp-fill');
 
-        if(nameLabel) nameLabel.innerText = `OPERATIVE: ${v.full_name ? v.full_name.toUpperCase() : "JOEL KAZADI"}`;
-        if(lvlLabel) lvlLabel.innerText = `LVL ${v.current_level || 1}`;
+        // 2. Inject Data
+        if(opName) opName.innerText = `OPERATIVE: ${v.codename.toUpperCase()}`;
+        if(lvlLabel) {
+            const calculatedLevel = Math.floor(v.xp / 1000) + 1;
+            lvlLabel.innerText = `LVL ${calculatedLevel}`;
+        }
+        if(xpText) xpText.innerText = `${v.xp} XP`;
+        
+        // 3. Animate XP Bar (Progress toward next 1000 XP)
         if(xpBar) {
             const progress = (v.xp % 1000) / 10;
             xpBar.style.width = progress + "%";
         }
-    } catch (e) { console.log("VITALS_LINK_FAILED"); }
+
+        console.log("> VITALS_SYNC_COMPLETE");
+    } catch (e) { 
+        console.warn("> SYSTEM_SYNC_FAILURE: Check Backend Connection"); 
+    }
 }
+
+// Auto-refresh vitals every 30 seconds to keep the dashboard live
+setInterval(refreshAll, 30000);

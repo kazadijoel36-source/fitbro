@@ -1,47 +1,31 @@
-async function renderCabinet() {
-    const userId = localStorage.getItem('fitbro_user_id');
-    if(!userId) return;
+const MEDAL_API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:8000" 
+    : "https://fitbro-os.onrender.com";
 
+async function renderCabinet() {
+    const userId = localStorage.getItem('fitbro_user_id') || "1";
     const cabinet = document.getElementById('cabinet');
     
     try {
-        // Multi-stream data fetch
-        const [vRes, hRes] = await Promise.all([
-            fetch(`${API_BASE}/vitals/${userId}`),
-            fetch(`${API_BASE}/health-check`)
-        ]);
-        
+        const vRes = await fetch(`${MEDAL_API}/vitals/${userId}`);
         const v = await vRes.json();
-        const h = await hRes.json();
 
-        cabinet.innerHTML = VANGUARD_MEDALS.map(medal => {
-            let isUnlocked = false;
+        // Using your medals array from gamify.js logic
+        const medals = [
+            { id: 'init', name: 'SYSTEM_INIT', icon: '🎖️', xp_req: 100 },
+            { id: 'vet', name: 'VANGUARD_VET', icon: '🔥', xp_req: 1000 }
+        ];
 
-            // TACTICAL LOGIC UNIT
-            if (medal.id === 'vanguard_init' && v.xp >= 100) isUnlocked = true;
-            if (medal.id === 'iron_lung' && v.current_water_ml >= 3000) isUnlocked = true;
-            if (medal.id === 'centurion' && v.daily_steps >= 10000) isUnlocked = true;
-            
-            // SYSTEM ARCHITECT LOGIC
-            if (medal.id === 'sys_architect' && 
-                h.status === "ONLINE" && 
-                (v.hydration_target || v.nutrition_target)) {
-                isUnlocked = true;
-            }
-
+        cabinet.innerHTML = medals.map(m => {
+            const unlocked = v.xp >= m.xp_req;
             return `
-                <div class="card medal-slot ${isUnlocked ? 'unlocked' : ''}">
-                    <span class="medal-icon">${medal.icon}</span>
-                    <h3 style="font-family:'Archivo Black'; font-size:0.85rem; margin:0;">${medal.name}</h3>
-                    <p class="mono-tag" style="font-size:0.55rem; margin-top:10px;">${medal.desc}</p>
-                    <span class="lock-status">${isUnlocked ? '[ UNLOCKED ]' : '[ LOCKED ]'}</span>
+                <div class="card" style="text-align:center; opacity: ${unlocked ? '1' : '0.3'}">
+                    <span style="font-size:2rem; display:block; margin-bottom:10px;">${m.icon}</span>
+                    <span class="tag">${m.name}</span>
+                    <small style="font-size:0.5rem">${unlocked ? 'UNLOCKED' : 'LOCKED'}</small>
                 </div>
             `;
         }).join('');
-
-    } catch (e) {
-        cabinet.innerHTML = `<div class="card span-12" style="color:var(--danger); text-align:center;">LINK_ERROR: DATABASE_OFFLINE</div>`;
-    }
+    } catch (e) { console.log("MEDAL_SYNC_ERROR"); }
 }
-
 window.onload = renderCabinet;

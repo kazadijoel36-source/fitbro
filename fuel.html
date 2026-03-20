@@ -2,17 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vanguard OS | Fuel</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00ffa3; --danger: #ff4757; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; }
+        body { 
+            background-color: var(--bg); color: white; 
+            font-family: 'JetBrains Mono', monospace; padding: 20px; padding-bottom: 120px;
+        }
+        .card { 
+            background: var(--card); border: 1px solid var(--border); padding: 20px; 
+            margin-bottom: 15px; clip-path: polygon(0 0, 95% 0, 100% 10%, 100% 100%, 5% 100%, 0 90%); 
+        }
+        .tag { font-size: 0.6rem; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        input { 
+            width: 100%; background: #000; border: 1px solid var(--border); 
+            padding: 15px; color: var(--primary); font-family: 'JetBrains Mono'; margin-bottom: 15px;
+        }
+        .btn-execute { 
+            background: var(--primary); color: #000; border: none; padding: 15px; 
+            width: 100%; font-family: 'Archivo Black'; cursor: pointer; 
+        }
+        .nav-dock { 
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; background: rgba(13,13,13,0.9); 
+            border: 1px solid var(--border); border-radius: 40px; padding: 12px; 
+            display: flex; justify-content: space-around; backdrop-filter: blur(10px); 
+        }
+        .nav-link { text-decoration: none; color: #444; font-size: 0.6rem; text-align: center; }
+        .nav-link.active { color: var(--primary); }
+    </style>
 </head>
 <body>
-
     <span class="tag">Sector_02: Resource_Intake</span>
-    <h2>Nutrition <span>Vault</span></h2>
+    <h2 style="font-family:'Archivo Black'; margin-bottom: 20px;">Nutrition <span style="color:var(--primary)">Vault</span></h2>
 
-    <div class="card" style="border-color: var(--danger); background: rgba(255,71,87,0.15);">
+    <div class="card" style="border-color: var(--danger); background: rgba(255,71,87,0.1);">
         <span class="tag" style="color:var(--danger)">Bio-Hazard_Alert</span>
         <p style="color:var(--danger); font-size: 0.75rem; font-weight: bold; line-height: 1.4;">
             LACTOSE_INTOLERANCE_ACTIVE. <br>
@@ -22,16 +49,13 @@
 
     <div class="card">
         <span class="tag">Fuel_Sync_Input</span>
-        <input type="text" id="food-input" placeholder="ENTER_MEAL (e.g. Jollof rice and chicken)">
+        <input type="text" id="food-input" placeholder="ENTER_MEAL (e.g. Chicken & Rice)">
         <button class="btn-execute" onclick="syncFuel()">SYNC_TO_VAULT</button>
     </div>
 
     <div class="card">
-        <span class="tag">Active_Metabolism</span>
-        <div style="display: flex; justify-content: space-between; align-items: baseline;">
-            <span style="font-size: 0.8rem;">DAILY_ALLOWANCE</span>
-            <span style="font-family: 'Archivo Black'; color: var(--blue);">2800 CAL</span>
-        </div>
+        <span class="tag">Mission_History</span>
+        <div id="m-list" style="font-size: 0.7rem; color: #666;">AWAITING_SYNC...</div>
     </div>
 
     <nav class="nav-dock">
@@ -42,23 +66,20 @@
     </nav>
 
     <script>
+        const API = window.location.hostname.includes("render.com") ? "https://fitbro-os.onrender.com" : "http://127.0.0.1:8000";
+
         async function syncFuel() {
             const food = document.getElementById('food-input').value;
-            if(!food) return alert("INPUT_REQUIRED");
+            const uid = localStorage.getItem('fitbro_user_id') || "1";
+            if(!food) return;
 
             try {
-                // This matches the /ai-log route in your Python file
-                const res = await fetch(`http://127.0.0.1:8000/ai-log?user_id=1&food_input=${encodeURIComponent(food)}`, { method: 'POST' });
-                
+                const res = await fetch(`${API}/ai-log?user_id=${uid}&food_input=${encodeURIComponent(food)}`, { method: 'POST' });
                 if(res.ok) {
                     alert("FUEL_RECORD_STORED");
                     document.getElementById('food-input').value = "";
-                } else {
-                    alert("SYNC_FAILURE_404");
                 }
-            } catch (e) {
-                alert("SYSTEM_OFFLINE");
-            }
+            } catch (e) { alert("SYSTEM_OFFLINE"); }
         }
     </script>
 </body>
