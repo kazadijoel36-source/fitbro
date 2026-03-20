@@ -1,51 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Vanguard">
     <meta charset="UTF-8">
-    <title>FitBro OS | Operative Dossier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vanguard OS | Operative Dossier</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .dash-layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .span-4 { grid-column: span 4; }
+        .span-8 { grid-column: span 8; }
+        @media (max-width: 768px) { .span-4, .span-8 { grid-column: span 12; } }
+        .mission-item { background: #080808; border: 1px solid var(--border); padding: 15px; border-radius: 4px; border-left: 3px solid var(--primary); }
+    </style>
 </head>
 <body>
     <div id="custom-cursor"></div>
-    <nav>
-        <a href="index.html" class="logo">FIT<span>BRO</span></a>
-        <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a><a href="chamber.html">Chamber</a><a href="profile.html" style="color:var(--primary)">Profile</a>
+    
+    <nav style="display: flex; justify-content: space-between; padding: 20px 40px; align-items: center;">
+        <a href="index.html" style="font-family:'Archivo Black'; color:white; text-decoration:none; font-size:1.5rem;">FIT<span style="color:var(--primary)">BRO</span></a>
+        <div style="display: flex; gap: 20px;">
+            <a href="dashboard.html" style="color:var(--gray); text-decoration:none; font-size:0.8rem;">DASHBOARD</a>
+            <a href="chamber.html" style="color:var(--gray); text-decoration:none; font-size:0.8rem;">CHAMBER</a>
+            <a href="profile.html" style="color:var(--primary); text-decoration:none; font-size:0.8rem;">PROFILE</a>
         </div>
     </nav>
 
     <div class="dash-layout">
         <div class="card span-4" style="text-align:center;">
-            <div style="width:120px; height:120px; background:#111; border-radius:50%; margin:0 auto 20px; border:2px solid var(--primary); display:flex; align-items:center; justify-content:center; font-size:3rem;">👤</div>
-            <h2 id="prof-name" style="font-family:'Archivo Black'; margin:0;">JOEL KAZADI</h2>
+            <div style="width:120px; height:120px; background:#111; border-radius:50%; margin:0 auto 20px; border:2px solid var(--primary); display:flex; align-items:center; justify-content:center; font-size:3rem; box-shadow: 0 0 20px var(--primary-glow);">👤</div>
+            <h2 id="prof-name" style="font-family:'Archivo Black'; margin:0; letter-spacing: 1px;">JOEL KAZADI</h2>
             <span class="mono-tag" style="color:var(--primary)">VANGUARD_OPERATIVE</span>
-            <div style="margin-top:20px; text-align:left; font-size:0.8rem;">
-                <p><b>RANK:</b> IT_STUDENT_YR2 (NWU)</p>
-                <p><b>HEIGHT:</b> 6'0"</p>
-                <p><b>BUILD:</b> MINI_AFRO // TRIANGLE_FRAME</p>
+            <div style="margin-top:25px; text-align:left; font-size:0.75rem; line-height: 1.8; color: var(--gray);">
+                <p><b style="color:white;">RANK:</b> IT_STUDENT_YR2 (NWU)</p>
+                <p><b style="color:white;">HEIGHT:</b> 6'0"</p>
+                <p><b style="color:white;">BUILD:</b> MINI_AFRO // TRIANGLE_FRAME</p>
             </div>
         </div>
 
         <div class="card span-8">
             <span class="mono-tag">Hardware_Manifest</span>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
-                <div class="mission-item done">
-                    <b>PRIMARY_STATION</b><br>HP ProBook 650 G4
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
+                <div class="mission-item">
+                    <b style="color:var(--primary); font-size:0.6rem;">PRIMARY_STATION</b><br>
+                    <span style="font-size:0.8rem;">HP ProBook 650 G4</span>
                 </div>
-                <div class="mission-item done">
-                    <b>MOBILE_LINK</b><br>ACTIVE_CAMERA_NODE
+                <div class="mission-item">
+                    <b style="color:var(--primary); font-size:0.6rem;">MOBILE_LINK</b><br>
+                    <span style="font-size:0.8rem;">ACTIVE_CAMERA_NODE</span>
                 </div>
             </div>
-            <span class="mono-tag" style="margin-top:30px;">Physical_Baselines</span>
+
+            <span class="mono-tag" style="margin-top:40px; display:block;">Physical_Baselines</span>
             <div id="baseline-stats" style="margin-top:15px;">
-                </div>
+                <div style="text-align:center; padding:20px; color:#444;">INITIALIZING_DOSSIER...</div>
+            </div>
         </div>
     </div>
 
