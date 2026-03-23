@@ -11,7 +11,7 @@ async function renderCabinet() {
     
     try {
         // 1. Fetch live operative vitals
-        const res = await fetch(`${MEDAL_API}/vitals/${userId}`);
+        const vRes = await fetch(`${MEDAL_API}/api/vitals/${userId}`);
         const v = await res.json();
 
         // 2. Map through the medals-data.js array

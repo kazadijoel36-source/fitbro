@@ -36,11 +36,14 @@ def fetch_operative_vitals(user_id: int):
     from psycopg2.extras import RealDictCursor
     try:
         cur = conn.cursor(cursor_factory=RealDictCursor)
+        # UPDATED: Uses 'operatives' table instead of 'user_profiles'
+        # UPDATED: Uses 'id' instead of 'user_id' to match fitbro.py
         query = """
-            SELECT p.*, m.hydration_target, m.kinetic_target, m.nutrition_target
-            FROM user_profiles p
-            LEFT JOIN daily_missions m ON p.user_id = m.user_id AND m.mission_date = CURRENT_DATE
-            WHERE p.user_id = %s
+            SELECT p.*, 
+                   m.hydration_target, m.kinetic_target, m.nutrition_target
+            FROM operatives p
+            LEFT JOIN daily_missions m ON p.id = m.user_id AND m.mission_date = CURRENT_DATE
+            WHERE p.id = %s
         """
         cur.execute(query, (user_id,))
         result = cur.fetchone()
@@ -53,12 +56,13 @@ def initialize_vanguard(user_id: int, data: OnboardData):
     conn = get_db_conn()
     try:
         cur = conn.cursor()
+        # UPDATED: Table name and column names to match the operatives schema
         cur.execute("""
-            UPDATE user_profiles SET 
-            current_weight=%s, target_weight=%s, height_cm=%s, 
-            lactose_intolerant=%s, max_pushups=%s, max_pullups=%s, 
-            xp=100 
-            WHERE user_id=%s
+            UPDATE operatives SET 
+            current_mass=%s, target_mass=%s, height=%s, 
+            lactose_intolerant=%s, pushup_max=%s, pullup_max=%s, 
+            total_xp=100 
+            WHERE id=%s
         """, (data.weight, data.target, data.height, data.lactose, data.pushups, data.pullups, user_id))
         conn.commit()
         return {"status": "INITIALIZED"}

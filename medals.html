@@ -4,30 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vanguard OS | Medals</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="custom-cursor"></div>
-
-    <div class="container" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+<body class="vanguard-theme">
+    <div class="container">
         <span class="tag">Sector_03: Achievement_Log</span>
-        <h1 style="font-family:'Archivo Black'; font-size: 2rem; margin-bottom: 5px;">MEDAL <span style="color:var(--primary)">ARRAY</span></h1>
-        <p class="tag" style="color:var(--gray); margin-bottom: 30px;">[ OPERATIVE_XP_SYNC_ACTIVE ]</p>
+        <h1 style="font-family:'Archivo Black'; font-size: 2rem;">MEDAL <span style="color:var(--primary)">ARRAY</span></h1>
 
-        <div class="medal-grid" id="cabinet" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div style="grid-column: span 2; text-align: center; padding: 40px; color: #333;">INITIALIZING_AWARDS_LINK...</div>
+        <div class="medal-grid" id="cabinet">
+            <div style="text-align:center; padding:50px; color:#333;">SYNCING_AWARDS...</div>
         </div>
     </div>
 
     <nav class="nav-dock">
-        <a href="dashboard.html" class="nav-link"><span>🏠</span>HOME</a>
-        <a href="chamber.html" class="nav-link"><span>⚔️</span>CHAMBER</a>
-        <a href="fuel.html" class="nav-link"><span>🥗</span>FUEL</a>
-        <a href="medals.html" class="nav-link active"><span>🎖️</span>MEDALS</a>
+        <a href="/dashboard" class="nav-link"><span>🏠</span>HOME</a>
+        <a href="/chamber" class="nav-link"><span>⚔️</span>CHAMBER</a>
+        <a href="/fuel" class="nav-link"><span>🥗</span>FUEL</a>
+        <a href="/medals" class="nav-link active"><span>🎖️</span>MEDALS</a>
     </nav>
 
-    <script src="medals-data.js"></script>
-    <script src="medals-checker.js"></script>
+    <script src="/static/medals-data.js"></script>
+    <script src="/static/medals-checker.js"></script>
 </body>
 </html>
