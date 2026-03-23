@@ -23,10 +23,17 @@
         </div>
 
         <div class="card">
-            <span class="tag">Fuel_Sync_Input</span>
-            <input type="text" id="food-input" placeholder="ENTER_MEAL (e.g. Chicken & Rice)">
-            <button class="btn-execute" id="sync-btn" onclick="syncFuel()">SYNC_TO_VAULT</button>
-        </div>
+    <span class="tag">Fuel_Sync_Input</span>
+    <input type="text" id="food-input" placeholder="ENTER_MEAL">
+    <button class="btn-execute" onclick="syncFuel()">SYNC_TO_VAULT</button>
+</div>
+
+<div class="card">
+    <span class="tag">Mission_History</span>
+    <div id="m-list"> </div>
+</div>
+
+<script src="nutrition-logic.js"></script>
 
         <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
             <div class="card" style="margin-bottom:0; text-align:center;">
@@ -57,3 +64,4 @@
     <script src="nutrition-logic.js"></script>
 </body>
 </html>
+<script src="nutrition-logic.js"></script>

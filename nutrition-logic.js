@@ -7,6 +7,21 @@ const NUT_API = window.location.hostname.includes("render.com")
     ? "https://fitbro-os.onrender.com" 
     : "http://127.0.0.1:8000";
 
+async function syncFuel() {
+    const input = document.getElementById('food-input'); // Matches the HTML ID
+    if (!input || !input.value) return alert("INPUT_REQUIRED");
+
+    try {
+        const res = await fetch(`${NUT_API}/ai-log?user_id=1&food_input=${encodeURIComponent(input.value)}`, { 
+            method: 'POST' 
+        });
+        if (res.ok) {
+            input.value = "";
+            refreshNutrition(); // Reloads the list immediately
+        }
+    } catch (e) { console.error("OFFLINE"); }
+}
+
 const userId = localStorage.getItem('fitbro_user_id') || "1";
 
 /**
