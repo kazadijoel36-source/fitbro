@@ -5,62 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vanguard OS | Medals</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles.css">
-<script src="dash-master.js"></script>
-
-<link rel="stylesheet" href="/static/styles.css">
-<script src="/static/dash-master.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #00ffa3; --bg: #000; --card: #0d0d0d; --border: #1a1a1a; }
-        body { background: var(--bg); color: white; font-family: 'JetBrains Mono', monospace; padding: 20px; padding-bottom: 120px; }
-        .container { max-width: 500px; margin: 0 auto; }
-        .tag { font-size: 0.6rem; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .medal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { 
-            background: var(--card); border: 1px solid var(--border); padding: 25px; 
-            text-align: center; transition: 0.3s;
-            clip-path: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 10% 100%, 0 90%);
-        }
-        .medal-icon { font-size: 2.5rem; display: block; margin-bottom: 10px; filter: grayscale(1); opacity: 0.2; }
-        .card.unlocked .medal-icon { filter: grayscale(0); opacity: 1; }
-        .card.unlocked { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,255,163,0.1); }
-        .nav-dock { 
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            width: 90%; max-width: 400px; background: rgba(13,13,13,0.9); 
-            border: 1px solid var(--border); border-radius: 40px; padding: 12px; 
-            display: flex; justify-content: space-around; backdrop-filter: blur(10px); 
-        }
-        .nav-link { text-decoration: none; color: #444; font-size: 0.6rem; text-align: center; }
-        .nav-link.active { color: var(--primary); }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <span class="tag">Sector_03: Achievement_Log</span>
-        <h1 style="font-family:'Archivo Black'; font-size: 2rem;">MEDAL <span style="color:var(--primary)">ARRAY</span></h1>
+    <div id="custom-cursor"></div>
 
-        <div class="medal-grid" id="cabinet">
-            <div class="card unlocked">
-                <span class="medal-icon">🎖️</span>
-                <span class="tag">SYSTEM_INIT</span>
-                <small style="font-size: 0.5rem; color: var(--primary);">[ UNLOCKED ]</small>
-            </div>
-            <div class="card">
-                <span class="medal-icon">🔥</span>
-                <span class="tag">7_DAY_STREAK</span>
-                <small style="font-size: 0.5rem;">[ LOCKED ]</small>
-            </div>
-            <div class="card">
-                <span class="medal-icon">⚔️</span>
-                <span class="tag">CHAMBER_VET</span>
-                <small style="font-size: 0.5rem;">[ LOCKED ]</small>
-            </div>
-            <div class="card">
-                <span class="medal-icon">🧪</span>
-                <span class="tag">CLEAN_FUEL</span>
-                <small style="font-size: 0.5rem;">[ LOCKED ]</small>
-            </div>
+    <div class="container" style="max-width: 500px; margin: 0 auto; padding: 20px;">
+        <span class="tag">Sector_03: Achievement_Log</span>
+        <h1 style="font-family:'Archivo Black'; font-size: 2rem; margin-bottom: 5px;">MEDAL <span style="color:var(--primary)">ARRAY</span></h1>
+        <p class="tag" style="color:var(--gray); margin-bottom: 30px;">[ OPERATIVE_XP_SYNC_ACTIVE ]</p>
+
+        <div class="medal-grid" id="cabinet" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="grid-column: span 2; text-align: center; padding: 40px; color: #333;">INITIALIZING_AWARDS_LINK...</div>
         </div>
     </div>
 
@@ -71,9 +27,7 @@
         <a href="medals.html" class="nav-link active"><span>🎖️</span>MEDALS</a>
     </nav>
 
-    <script>
-        const API = window.location.hostname.includes("render.com") ? "https://fitbro-os.onrender.com" : "http://127.0.0.1:8000";
-        // Logic to check medals from vitals goes here
-    </script>
+    <script src="medals-data.js"></script>
+    <script src="medals-checker.js"></script>
 </body>
 </html>
