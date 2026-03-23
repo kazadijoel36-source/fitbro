@@ -3,6 +3,8 @@ from routers import auth, nutrition, user, workout
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from psycopg2.extras import RealDictCursor
 from datetime import datetime, timedelta
 import os
@@ -11,6 +13,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = FastAPI()
+# This tells the server to look for your HTML/JS/CSS files in the main folder
+app.mount("/static", StaticFiles(directory="."), name="static")
+
+@app.get("/dashboard")
+async def read_index():
+    return FileResponse('dashboard.html')
 
 # 1. PRODUCTION_READY_CORS
 app.add_middleware(
