@@ -131,6 +131,10 @@ async def get_vitals(user_id: int):
     finally:
         conn.close()
 
+        @app.get("/fuel")
+        async def read_fuel():
+         return FileResponse('fuel.html')
+
 @app.get("/history/{operative_id}")
 async def get_history(operative_id: int):
     conn = get_db_conn()
@@ -148,3 +152,4 @@ app.include_router(workout.router)   # Links the Chamber AI
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+    

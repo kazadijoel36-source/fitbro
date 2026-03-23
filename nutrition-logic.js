@@ -64,6 +64,31 @@ async function refreshNutrition() {
  * SYNC_FUEL: Sends meal data to AI for analysis
  */
 async function syncFuel() {
+    async function syncFuel() {
+    const food = document.getElementById('food-input').value;
+    if(!food) return alert("INPUT_REQUIRED");
+
+    // SMART_URL: Detects if you are on your ProBook or Phone (Render)
+    const API_BASE = window.location.hostname.includes("render.com") 
+        ? "https://fitbro-os.onrender.com" 
+        : "http://127.0.0.1:8000";
+
+    try {
+        // Now it uses the dynamic API_BASE instead of a hardcoded IP
+        const res = await fetch(`${API_BASE}/ai-log?user_id=1&food_input=${encodeURIComponent(food)}`, { 
+            method: 'POST' 
+        });
+        
+        if(res.ok) {
+            alert("FUEL_RECORD_STORED");
+            document.getElementById('food-input').value = "";
+        } else {
+            alert("SYNC_FAILURE_404");
+        }
+    } catch (e) {
+        alert("SYSTEM_OFFLINE: DATABASE_LINK_SEVERED");
+    }
+}
     const input = document.getElementById('food-input');
     const btn = document.getElementById('sync-btn');
     if (!input || !input.value) return alert("INPUT_REQUIRED");
