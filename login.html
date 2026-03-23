@@ -63,7 +63,7 @@
 
         <span class="mono-tag">Operative_Email</span>
         <input type="email" id="email" placeholder="ENTER EMAIL">
-        
+         
         <span class="mono-tag">Access_Cipher</span>
         <input type="password" id="pass" placeholder="ENTER PASSWORD">
 
@@ -77,9 +77,10 @@
     <script>
         let isSignup = false;
         // SMART_URL: Detects if running on ProBook (Localhost) or Render
-        const AUTH_API = window.location.hostname.includes("render.com") 
+        const API_URL = window.location.hostname.includes("render.com")
             ? "https://fitbro-os.onrender.com" 
             : "http://127.0.0.1:8000";
+            const endpoint = isSignup ? `${API_URL}/api/register` : `${API_URL}/login`;
 
         function toggleMode() {
             isSignup = !isSignup;

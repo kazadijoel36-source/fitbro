@@ -11,7 +11,7 @@ async function loadDossier() {
 
     try {
         console.log(`> RETRIEVING_DOSSIER_FROM: ${PROF_API}/vitals/${userId}`);
-        const res = await fetch(`${PROF_API}/vitals/${userId}`);
+        const res = await fetch(`${API_BASE}/vitals/${userId}`);
         const v = await res.json();
 
         if (statsContainer) {

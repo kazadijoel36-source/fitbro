@@ -77,21 +77,15 @@ async function refreshNutrition() {
  * SYNC_FUEL: Takes the text input, sends it to the AI for analysis, 
  * and updates the vault history.
  */
-async function syncF() {
-    const input = document.getElementById('food-input');
-    const btn = document.querySelector('.btn-execute');
-
-    if (!input || !input.value) {
-        if (navigator.vibrate) navigator.vibrate([50, 50]);
-        return alert("CRITICAL: Fuel input required for analysis.");
-    }
-
-    // Visual Feedback for Operative
-    const originalText = btn.innerText;
-    btn.innerText = "ANALYZING_BIOMETRICS...";
-    btn.disabled = true;
+async function syncFuel() {
+    const food = document.getElementById('food-input').value;
+    const API_BASE = window.location.hostname.includes("render.com") 
+        ? "https://fitbro-os.onrender.com" 
+        : "http://127.0.0.1:8000";
 
     try {
+        const res = await fetch(`${API_BASE}/ai-log?user_id=1&food_input=${encodeURIComponent(food)}`, { method: 'POST' });
+        // ... rest of your code
         const response = await fetch(`${NUT_API}/ai-log?user_id=${userId}&food_input=${encodeURIComponent(input.value)}`, {
             method: 'POST'
         });
