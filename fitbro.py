@@ -131,9 +131,12 @@ async def get_vitals(user_id: int):
     finally:
         conn.close()
 
-        @app.get("/fuel")
-        async def read_fuel():
-         return FileResponse('fuel.html')
+# --- MOVE THIS OUTSIDE THE VITALS FUNCTION ---
+@app.get("/fuel")
+async def read_fuel():
+    return FileResponse('fuel.html')
+
+
 
 @app.get("/history/{operative_id}")
 async def get_history(operative_id: int):
