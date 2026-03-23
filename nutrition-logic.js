@@ -1,26 +1,12 @@
 /**
  * VANGUARD_OS: NUTRITION_VAULT_LOGIC
+ * RESTORED_CLEAN_BUILD
  */
 
 // 1. SMART_URL_DETECTION
 const NUT_API = window.location.hostname.includes("render.com") 
     ? "https://fitbro-os.onrender.com" 
     : "http://127.0.0.1:8000";
-
-async function syncFuel() {
-    const input = document.getElementById('food-input'); // Matches the HTML ID
-    if (!input || !input.value) return alert("INPUT_REQUIRED");
-
-    try {
-        const res = await fetch(`${NUT_API}/ai-log?user_id=1&food_input=${encodeURIComponent(input.value)}`, { 
-            method: 'POST' 
-        });
-        if (res.ok) {
-            input.value = "";
-            refreshNutrition(); // Reloads the list immediately
-        }
-    } catch (e) { console.error("OFFLINE"); }
-}
 
 const userId = localStorage.getItem('fitbro_user_id') || "1";
 
@@ -33,11 +19,12 @@ async function refreshNutrition() {
     const countDisplay = document.getElementById('meal-count');
 
     try {
+        console.log(`> QUERYING_VAULT: ${NUT_API}/history/${userId}`);
         const res = await fetch(`${NUT_API}/history/${userId}`);
         if (!res.ok) throw new Error("VAULT_LINK_SEVERED");
         
         const data = await res.json();
-        // Handle both object {history: []} and array [] formats
+        // Standardize the response format
         const historyArray = data.history || data; 
         
         let totalKcal = 0;
@@ -47,14 +34,15 @@ async function refreshNutrition() {
                 list.innerHTML = `<div style="text-align:center; color:#444; padding:20px;">NO_FUEL_RECORDS_FOUND</div>`;
             } else {
                 list.innerHTML = historyArray.map(item => {
-                    const calories = item.calories || 400;
+                    // Extract calories from AI analysis string if needed
+                    const calories = item.amount || 400; 
                     totalKcal += calories;
                     return `
                         <div class="card" style="margin-bottom:10px; border-left: 3px solid var(--primary); padding:15px;">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <div>
                                     <span class="tag" style="margin:0;">Analysis_Complete</span>
-                                    <b style="text-transform: uppercase; font-size:0.8rem; display:block;">${item.meal_description || item.event}</b>
+                                    <b style="text-transform: uppercase; font-size:0.8rem; display:block;">${item.event || "UNKNOWN_FUEL"}</b>
                                 </div>
                                 <div style="text-align:right;">
                                     <span style="color:var(--primary); font-family:'Archivo Black';">+${calories}</span>
@@ -71,6 +59,7 @@ async function refreshNutrition() {
         if (countDisplay) countDisplay.innerText = historyArray.length;
 
     } catch (e) {
+        console.error("> NUTRITION_VAULT_OFFLINE:", e);
         if (list) list.innerHTML = `<div class="tag" style="color:var(--danger); text-align:center;">DATABASE_OFFLINE</div>`;
     }
 }
@@ -79,33 +68,9 @@ async function refreshNutrition() {
  * SYNC_FUEL: Sends meal data to AI for analysis
  */
 async function syncFuel() {
-    async function syncFuel() {
-    const food = document.getElementById('food-input').value;
-    if(!food) return alert("INPUT_REQUIRED");
-
-    // SMART_URL: Detects if you are on your ProBook or Phone (Render)
-    const API_BASE = window.location.hostname.includes("render.com") 
-        ? "https://fitbro-os.onrender.com" 
-        : "http://127.0.0.1:8000";
-
-    try {
-        // Now it uses the dynamic API_BASE instead of a hardcoded IP
-        const res = await fetch(`${API_BASE}/ai-log?user_id=1&food_input=${encodeURIComponent(food)}`, { 
-            method: 'POST' 
-        });
-        
-        if(res.ok) {
-            alert("FUEL_RECORD_STORED");
-            document.getElementById('food-input').value = "";
-        } else {
-            alert("SYNC_FAILURE_404");
-        }
-    } catch (e) {
-        alert("SYSTEM_OFFLINE: DATABASE_LINK_SEVERED");
-    }
-}
     const input = document.getElementById('food-input');
-    const btn = document.getElementById('sync-btn');
+    const btn = document.querySelector('.btn-execute'); // Standardized selector
+
     if (!input || !input.value) return alert("INPUT_REQUIRED");
 
     const originalText = btn.innerText;
@@ -120,16 +85,22 @@ async function syncFuel() {
         if (res.ok) {
             input.value = "";
             btn.innerText = "SYNC_SUCCESSFUL";
+            btn.style.backgroundColor = "var(--primary)";
+            
             if (navigator.vibrate) navigator.vibrate(20);
-            await refreshNutrition();
+            
+            // Wait briefly so the DB can update before we refresh
+            setTimeout(refreshNutrition, 500); 
         } else {
             throw new Error("SYNC_FAILED");
         }
     } catch (e) {
         btn.innerText = "RETRY_SYNC";
+        btn.style.backgroundColor = "var(--danger)";
     } finally {
         setTimeout(() => {
             btn.innerText = originalText;
+            btn.style.backgroundColor = "";
             btn.disabled = false;
         }, 2000);
     }
@@ -144,4 +115,5 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
+// Load the vault data on boot
 window.onload = refreshNutrition;
