@@ -1,11 +1,8 @@
 /**
  * VANGUARD_OS: NUTRITION_VAULT_LOGIC
- * Version: 3.0.5
- * Author: Joel Kazadi
  */
 
 // 1. SMART_URL_DETECTION
-// Automatically switches between local development and Render cloud
 const NUT_API = window.location.hostname.includes("render.com") 
     ? "https://fitbro-os.onrender.com" 
     : "http://127.0.0.1:8000";
@@ -13,8 +10,7 @@ const NUT_API = window.location.hostname.includes("render.com")
 const userId = localStorage.getItem('fitbro_user_id') || "1";
 
 /**
- * REFRESH_NUTRITION: Fetches the full history from the database 
- * and updates the UI cards and calorie counters.
+ * REFRESH_NUTRITION: Updates the UI history and calorie totals
  */
 async function refreshNutrition() {
     const list = document.getElementById('m-list');
@@ -22,37 +18,31 @@ async function refreshNutrition() {
     const countDisplay = document.getElementById('meal-count');
 
     try {
-        console.log(`> INITIALIZING_VAULT_QUERY: ${NUT_API}/history/${userId}`);
         const res = await fetch(`${NUT_API}/history/${userId}`);
-        
         if (!res.ok) throw new Error("VAULT_LINK_SEVERED");
         
         const data = await res.json();
+        // Handle both object {history: []} and array [] formats
+        const historyArray = data.history || data; 
+        
         let totalKcal = 0;
 
-        // Map the database history into tactical UI cards
         if (list) {
-            if (data.length === 0) {
-                list.innerHTML = `<div class="card" style="text-align:center; color:#444;">NO_FUEL_RECORDS_FOUND</div>`;
+            if (historyArray.length === 0) {
+                list.innerHTML = `<div style="text-align:center; color:#444; padding:20px;">NO_FUEL_RECORDS_FOUND</div>`;
             } else {
-                list.innerHTML = data.map(item => {
-                    // Logic: Use returned calories or default to 400 for analysis
+                list.innerHTML = historyArray.map(item => {
                     const calories = item.calories || 400;
                     totalKcal += calories;
-                    
                     return `
-                        <div class="card" style="margin-bottom:12px; border-left: 3px solid var(--primary);">
+                        <div class="card" style="margin-bottom:10px; border-left: 3px solid var(--primary); padding:15px;">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <div>
-                                    <span class="tag">Analysis_Complete</span>
-                                    <b style="text-transform: uppercase; font-size:0.85rem; display:block; margin-top:5px;">
-                                        ${item.event || item.meal_description}
-                                    </b>
+                                    <span class="tag" style="margin:0;">Analysis_Complete</span>
+                                    <b style="text-transform: uppercase; font-size:0.8rem; display:block;">${item.meal_description || item.event}</b>
                                 </div>
                                 <div style="text-align:right;">
-                                    <span style="color:var(--primary); font-family:'Archivo Black'; font-size:1rem;">
-                                        +${calories}
-                                    </span>
+                                    <span style="color:var(--primary); font-family:'Archivo Black';">+${calories}</span>
                                     <span class="tag" style="margin:0;">KCAL</span>
                                 </div>
                             </div>
@@ -62,58 +52,56 @@ async function refreshNutrition() {
             }
         }
 
-        // Update the global metrics if elements exist
         if (kcalDisplay) kcalDisplay.innerText = totalKcal;
-        if (countDisplay) countDisplay.innerText = data.length;
+        if (countDisplay) countDisplay.innerText = historyArray.length;
 
-        console.log("> NUTRITION_SYNC_SUCCESSFUL");
     } catch (e) {
-        console.error("> CRITICAL_SYNC_FAILURE:", e);
-        if (list) list.innerHTML = `<div class="card" style="color:var(--danger); text-align:center;">SYSTEM_OFFLINE: DATABASE_LINK_ERROR</div>`;
+        if (list) list.innerHTML = `<div class="tag" style="color:var(--danger); text-align:center;">DATABASE_OFFLINE</div>`;
     }
 }
 
 /**
- * SYNC_FUEL: Takes the text input, sends it to the AI for analysis, 
- * and updates the vault history.
+ * SYNC_FUEL: Sends meal data to AI for analysis
  */
 async function syncFuel() {
-    const food = document.getElementById('food-input').value;
-    const API_BASE = window.location.hostname.includes("render.com") 
-        ? "https://fitbro-os.onrender.com" 
-        : "http://127.0.0.1:8000";
+    const input = document.getElementById('food-input');
+    const btn = document.getElementById('sync-btn');
+    if (!input || !input.value) return alert("INPUT_REQUIRED");
+
+    const originalText = btn.innerText;
+    btn.innerText = "ANALYZING...";
+    btn.disabled = true;
 
     try {
-        const res = await fetch(`${API_BASE}/ai-log?user_id=1&food_input=${encodeURIComponent(food)}`, { method: 'POST' });
-        // ... rest of your code
-        const response = await fetch(`${NUT_API}/ai-log?user_id=${userId}&food_input=${encodeURIComponent(input.value)}`, {
-            method: 'POST'
+        const res = await fetch(`${NUT_API}/ai-log?user_id=${userId}&food_input=${encodeURIComponent(input.value)}`, { 
+            method: 'POST' 
         });
 
-        if (response.ok) {
+        if (res.ok) {
             input.value = "";
             btn.innerText = "SYNC_SUCCESSFUL";
-            btn.style.backgroundColor = "var(--primary)";
-            
-            // Trigger haptic feedback on mobile
             if (navigator.vibrate) navigator.vibrate(20);
-            
-            // Refresh the list to show the new entry
             await refreshNutrition();
         } else {
-            throw new Error("API_REJECTION");
+            throw new Error("SYNC_FAILED");
         }
     } catch (e) {
         btn.innerText = "RETRY_SYNC";
-        btn.style.backgroundColor = "var(--danger)";
     } finally {
         setTimeout(() => {
             btn.innerText = originalText;
-            btn.style.backgroundColor = "";
             btn.disabled = false;
         }, 2000);
     }
 }
 
-// Ensure the vault refreshes immediately upon system boot
+// Custom Cursor Utility
+document.addEventListener('mousemove', (e) => {
+    const c = document.getElementById('custom-cursor');
+    if(c) {
+        c.style.left = e.clientX + 'px';
+        c.style.top = e.clientY + 'px';
+    }
+});
+
 window.onload = refreshNutrition;

@@ -5,62 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vanguard OS | Fuel</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles.css">
-<script src="dash-master.js"></script>
-
-<link rel="stylesheet" href="/static/styles.css">
-<script src="/static/dash-master.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #00ffa3; --danger: #ff4757; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; }
-        body { 
-            background-color: var(--bg); color: white; 
-            font-family: 'JetBrains Mono', monospace; padding: 20px; padding-bottom: 120px;
-        }
-        .card { 
-            background: var(--card); border: 1px solid var(--border); padding: 20px; 
-            margin-bottom: 15px; clip-path: polygon(0 0, 95% 0, 100% 10%, 100% 100%, 5% 100%, 0 90%); 
-        }
-        .tag { font-size: 0.6rem; letter-spacing: 2px; color: #555; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        input { 
-            width: 100%; background: #000; border: 1px solid var(--border); 
-            padding: 15px; color: var(--primary); font-family: 'JetBrains Mono'; margin-bottom: 15px;
-        }
-        .btn-execute { 
-            background: var(--primary); color: #000; border: none; padding: 15px; 
-            width: 100%; font-family: 'Archivo Black'; cursor: pointer; 
-        }
-        .nav-dock { 
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
-            width: 90%; max-width: 400px; background: rgba(13,13,13,0.9); 
-            border: 1px solid var(--border); border-radius: 40px; padding: 12px; 
-            display: flex; justify-content: space-around; backdrop-filter: blur(10px); 
-        }
-        .nav-link { text-decoration: none; color: #444; font-size: 0.6rem; text-align: center; }
-        .nav-link.active { color: var(--primary); }
-    </style>
 </head>
-<body>
-    <span class="tag">Sector_02: Resource_Intake</span>
-    <h2 style="font-family:'Archivo Black'; margin-bottom: 20px;">Nutrition <span style="color:var(--primary)">Vault</span></h2>
+<body class="vanguard-theme">
+    <div id="custom-cursor"></div>
 
-    <div class="card" style="border-color: var(--danger); background: rgba(255,71,87,0.1);">
-        <span class="tag" style="color:var(--danger)">Bio-Hazard_Alert</span>
-        <p style="color:var(--danger); font-size: 0.75rem; font-weight: bold; line-height: 1.4;">
-            LACTOSE_INTOLERANCE_ACTIVE. <br>
-            DAIRY_FUEL_IS_PROHIBITED_FOR_OPERATIVE_01.
-        </p>
-    </div>
+    <div class="container">
+        <span class="tag">Sector_02: Resource_Intake</span>
+        <h2 style="margin-bottom:20px;">Nutrition <span style="color:var(--primary)">Vault</span></h2>
 
-    <div class="card">
-        <span class="tag">Fuel_Sync_Input</span>
-        <input type="text" id="food-input" placeholder="ENTER_MEAL (e.g. Chicken & Rice)">
-        <button class="btn-execute" onclick="syncFuel()">SYNC_TO_VAULT</button>
-    </div>
+        <div class="card" style="border-color: var(--danger); background: rgba(255,71,87,0.1);">
+            <span class="tag" style="color:var(--danger)">Bio-Hazard_Alert</span>
+            <p style="color:var(--danger); font-size: 0.75rem; font-weight: bold; line-height: 1.4;">
+                LACTOSE_INTOLERANCE_ACTIVE. <br>
+                DAIRY_FUEL_IS_PROHIBITED_FOR_OPERATIVE_01.
+            </p>
+        </div>
 
-    <div class="card">
-        <span class="tag">Mission_History</span>
-        <div id="m-list" style="font-size: 0.7rem; color: #666;">AWAITING_SYNC...</div>
+        <div class="card">
+            <span class="tag">Fuel_Sync_Input</span>
+            <input type="text" id="food-input" placeholder="ENTER_MEAL (e.g. Chicken & Rice)">
+            <button class="btn-execute" id="sync-btn" onclick="syncFuel()">SYNC_TO_VAULT</button>
+        </div>
+
+        <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <div class="card" style="margin-bottom:0; text-align:center;">
+                <span class="tag">Daily_KCAL</span>
+                <span id="total-kcal" style="font-family:'Archivo Black'; font-size:1.2rem; color:var(--primary)">0</span>
+            </div>
+            <div class="card" style="margin-bottom:0; text-align:center;">
+                <span class="tag">Records</span>
+                <span id="meal-count" style="font-family:'Archivo Black'; font-size:1.2rem; color:var(--blue)">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="tag">Mission_History</span>
+            <div id="m-list" style="margin-top:10px;">
+                <div style="text-align:center; padding:20px; color:#444;">INITIALIZING_VAULT...</div>
+            </div>
+        </div>
     </div>
 
     <nav class="nav-dock">
@@ -70,22 +54,6 @@
         <a href="medals.html" class="nav-link"><span>🎖️</span>MEDALS</a>
     </nav>
 
-    <script>
-        const API = window.location.hostname.includes("render.com") ? "https://fitbro-os.onrender.com" : "http://127.0.0.1:8000";
-
-        async function syncFuel() {
-            const food = document.getElementById('food-input').value;
-            const uid = localStorage.getItem('fitbro_user_id') || "1";
-            if(!food) return;
-
-            try {
-                const res = await fetch(`${API}/ai-log?user_id=${uid}&food_input=${encodeURIComponent(food)}`, { method: 'POST' });
-                if(res.ok) {
-                    alert("FUEL_RECORD_STORED");
-                    document.getElementById('food-input').value = "";
-                }
-            } catch (e) { alert("SYSTEM_OFFLINE"); }
-        }
-    </script>
+    <script src="nutrition-logic.js"></script>
 </body>
 </html>
