@@ -7,6 +7,7 @@ from fastapi.responses import FileResponse
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
+
 # 1. LOAD_ENVIRONMENT
 load_dotenv()
 app = FastAPI(title="Vanguard OS API")
@@ -17,7 +18,7 @@ async def read_index():
 
 # 2. MOUNT_STATIC_FILES
 # This allows https://fitbro-os.onrender.com/dashboard to work
-app.mount("/static", StaticFiles(directory="."), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # 3. GLOBAL_SECURITY_CORS
 app.add_middleware(
