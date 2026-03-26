@@ -1,216 +1,100 @@
 :root {
-    --yellow: #fbe34d;
-    --bg-dark: #121619;
+    --green: #39ff14;
+    --dark-bg: #0a0a0a;
+    --card-bg: rgba(20, 20, 20, 0.8);
+    --text-dim: #a0a0a0;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    /* MOBILE_LOCK_SYSTEM */
-body {
-    background-color: #000;
-    margin: 0;
+    background-color: var(--dark-bg);
+    color: white;
+    font-family: 'Inter', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     min-height: 100vh;
 }
 
 .main-container {
     width: 100%;
-    max-width: 430px; /* Standard iPhone 15 Pro Max width */
+    max-width: 430px;
     height: 100vh;
-    position: relative;
-    overflow-y: auto;
-    background-color: var(--bg-dark);
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-}
-}
-.login-prompt {
-    margin-top: 20px;
-    font-size: 0.75rem;
-    color: #888;
-    text-align: center;
-    letter-spacing: 1px;
-}
-
-.login-link {
-    color: var(--yellow);
-    text-decoration: none;
-    font-weight: 900;
-    margin-left: 5px;
-}
-
-.price-tag {
-    margin-top: 15px;
-    font-size: 0.65rem;
-    color: #444;
-    text-align: center;
-}
-
-/* Background Image/Video Holder */
-.gym-theme {
-    /* Temporary high-end dark gradient until we link your video */
-    background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, #121619 80%), 
-                url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1000&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center;
-}
-
-/* Dark Overlay to make text pop */
-.background-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: linear-gradient(180deg, rgba(18,22,25,0.8) 0%, rgba(18,22,25,0.4) 50%, rgba(18,22,25,0.95) 100%);
-    z-index: 1;
-}
-
-.main-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 40px 25px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    z-index: 2; /* Put content above the overlay */
+    padding: 25px;
+    position: relative;
 }
 
-.top-bar {
+/* Header Styling */
+.vanguard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.logo-text {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: -1px;
-}
-
-.os-version {
-    font-size: 0.7rem;
-    color: #a0a0a0;
-}
-
-.os-version .accent { color: var(--yellow); font-weight: 700; }
-
-.review-badge {
-    margin-bottom: 10px;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-
-.stars { color: var(--yellow); margin-right: 5px; }
-
-h1 {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 2.2rem;
-    line-height: 1.1;
-    text-transform: uppercase;
-}
-
-.start-btn {
-    width: 100%;
-    background-color: var(--yellow);
-    color: black;
-    border: none;
-    padding: 22px;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-
-.start-btn:active {
-    transform: scale(0.96);
-}
-.auth-box {
-    background: rgba(18, 22, 25, 0.9);
-    padding: 30px 20px;
-    border-radius: 20px;
-    border: 1px solid #333;
-}
-
-.tabs {
-    display: flex;
-    gap: 10px;
     margin-bottom: 30px;
 }
 
-.tab-btn {
-    background: none;
+.logo-main { font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; }
+.logo-sub { color: var(--green); font-size: 0.7rem; font-weight: 700; margin-left: 5px; }
+.trial-tag { font-size: 0.6rem; border: 1px solid var(--green); padding: 4px 8px; color: var(--green); }
+
+/* Hero Section */
+.hero-image-container {
+    width: 100%;
+    height: 250px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.hero-image-container img { width: 100%; height: 100%; object-fit: cover; }
+.image-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(0deg, var(--dark-bg) 0%, transparent 100%);
+}
+
+h1 { font-size: 2.5rem; font-weight: 900; line-height: 1; margin-bottom: 15px; }
+.accent { color: var(--green); }
+.hero-text p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; }
+
+/* Buttons */
+.primary-btn {
+    background-color: var(--green);
+    color: black;
     border: none;
-    color: #666;
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 0.9rem;
+    padding: 20px;
+    width: 100%;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
     cursor: pointer;
-    padding-bottom: 5px;
+    margin-top: auto;
 }
 
-.tab-btn.active {
-    color: var(--yellow);
-    border-bottom: 2px solid var(--yellow);
-}
-
-.auth-box h2 {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 1.5rem;
-    margin-bottom: 5px;
-}
-
-#auth-sub {
-    font-size: 0.8rem;
-    color: #888;
-    margin-bottom: 25px;
-}
-
-.input-group {
-    margin-bottom: 20px;
+.secondary-actions {
     display: flex;
-    flex-direction: column;
-}
-
-.input-group label {
-    font-size: 0.65rem;
-    font-weight: 900;
-    color: #555;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
-}
-
-.input-group input {
-    background: #1a1f24;
-    border: 1px solid #333;
-    padding: 15px;
-    border-radius: 10px;
-    color: white;
-    font-family: 'Inter', sans-serif;
-}
-
-.price-notice {
-    background: rgba(251, 227, 77, 0.1);
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 0.7rem;
-    color: var(--yellow);
-    text-align: center;
-    font-weight: 700;
-}
-
-.back-link {
-    display: block;
-    text-align: center;
-    color: #666;
-    text-decoration: none;
-    font-size: 0.7rem;
-    font-weight: 700;
+    justify-content: space-between;
     margin-top: 20px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+}
+
+.secondary-actions a { color: white; font-weight: 700; text-decoration: none; }
+
+/* Auth Card */
+.auth-card {
+    margin-top: 50px;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid #222;
+}
+
+.input-field { margin-bottom: 20px; }
+.input-field label { display: block; font-size: 0.6rem; color: var(--text-dim); margin-bottom: 8px; }
+.input-field input {
+    width: 100%; background: #111; border: 1px solid #333;
+    padding: 15px; border-radius: 10px; color: white;
 }

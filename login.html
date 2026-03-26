@@ -2,76 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FITBRO | ACCESS</title>
-    <link rel="stylesheet" href="static/landing-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="landing-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="gym-theme">
-    <div class="background-overlay"></div>
-    
+<body class="premium-theme">
     <div class="main-container">
-        <header class="top-bar">
-            <img src="static/logo.png" alt="FITBRO" style="height: 40px;">
-            <span class="os-version">AUTH_GATE_<span class="accent">01</span></span>
-        </header>
+        <div class="auth-card">
+            <h2>ACCESS GATE</h2>
+            <p>Sync your operative profile.</p>
 
-        <div class="auth-box">
-            <div class="tabs">
-                <button id="login-tab" class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
-                <button id="signup-tab" class="tab-btn" onclick="switchTab('signup')">SIGNUP</button>
-            </div>
-
-            <h2 id="auth-title">WELCOME BACK</h2>
-            <p id="auth-sub">Enter your credentials to sync.</p>
-
-            <form id="auth-form" class="tactical-form">
-                <div class="input-group">
-                    <label>EMAIL_ADDRESS</label>
+            <form class="vanguard-form">
+                <div class="input-field">
+                    <label>OPERATIVE_EMAIL</label>
                     <input type="email" placeholder="name@email.com" required>
                 </div>
-                <div class="input-group">
-                    <label>ACCESS_KEY</label>
+                <div class="input-field">
+                    <label>SECURE_KEY</label>
                     <input type="password" placeholder="••••••••" required>
                 </div>
-                
-                <div id="signup-only" style="display:none;">
-                    <div class="price-notice">
-                        <span>R50/MO AFTER 14-DAY TRIAL</span>
-                    </div>
-                </div>
-
-                <button type="submit" class="start-btn">INITIALIZE</button>
+                <button type="submit" class="primary-btn">INITIALIZE</button>
             </form>
-        </div>
-
-        <div class="footer-action">
-            <a href="/" class="back-link">← BACK TO SYSTEM START</a>
+            <a href="/" class="text-btn">← RETURN TO BASE</a>
         </div>
     </div>
-
-    <script>
-        function switchTab(type) {
-            const loginBtn = document.getElementById('login-tab');
-            const signupBtn = document.getElementById('signup-tab');
-            const title = document.getElementById('auth-title');
-            const sub = document.getElementById('auth-sub');
-            const signupExtra = document.getElementById('signup-only');
-
-            if (type === 'login') {
-                loginBtn.classList.add('active');
-                signupBtn.classList.remove('active');
-                title.innerText = 'WELCOME BACK';
-                sub.innerText = 'Enter your credentials to sync.';
-                signupExtra.style.display = 'none';
-            } else {
-                signupBtn.classList.add('active');
-                loginBtn.classList.remove('active');
-                title.innerText = 'CREATE PROFILE';
-                sub.innerText = 'Join the 1%. 14-day trial included.';
-                signupExtra.style.display = 'block';
-            }
-        }
-    </script>
 </body>
 </html>
