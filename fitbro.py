@@ -65,10 +65,5 @@ async def read_profile():
 if __name__ == "__main__":
     import uvicorn
     import os
-    if __name__ == "__main__":
-    import uvicorn
-    import os
-    # FORCE 0.0.0.0 for Render. 127.0.0.1 will NOT work on the cloud.
-    # We use 10000 as a fallback because that's Render's favorite number.
     port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("fitbro:app", host="0.0.0.0", port=port, log_level="info")
+    uvicorn.run("fitbro:app", host="0.0.0.0", port=port)
