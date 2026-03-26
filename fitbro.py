@@ -11,6 +11,10 @@ from dotenv import load_dotenv
 load_dotenv()
 app = FastAPI(title="Vanguard OS API")
 
+@app.get("/")
+async def read_index():
+    return FileResponse('index.html')
+
 # 2. MOUNT_STATIC_FILES
 # This allows https://fitbro-os.onrender.com/dashboard to work
 app.mount("/static", StaticFiles(directory="."), name="static")

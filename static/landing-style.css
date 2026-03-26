@@ -1,0 +1,89 @@
+:root {
+    --bg: #000000;
+    --card: #1c1c1e;
+    --primary: #FFD700; /* Gold */
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin-top: 40px;
+}
+
+.glow { color: var(--primary); text-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+
+.benefit-list {
+    margin: 40px 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.benefit-item { display: flex; align-items: center; gap: 15px; }
+.icon { font-size: 1.5rem; }
+
+.plan-card {
+    background: var(--card);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.plan-card.featured { border-color: #3b3b3f; }
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: var(--primary);
+    color: black;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 2px 10px;
+    border-radius: 5px;
+}
+
+.cta-button {
+    width: 100%;
+    background: var(--primary);
+    color: black;
+    border: none;
+    padding: 20px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.cta-button:active { transform: scale(0.98); }
