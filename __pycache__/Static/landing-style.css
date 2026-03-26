@@ -10,14 +10,25 @@
 }
 
 body {
-    background-color: var(--bg-dark);
-    color: white;
-    font-family: 'Inter', sans-serif;
-    height: 100vh;
+    /* MOBILE_LOCK_SYSTEM */
+body {
+    background-color: #000;
+    margin: 0;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 430px; /* Standard iPhone 15 Pro Max width */
+    height: 100vh;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    background-color: var(--bg-dark);
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
 }
 
 /* Background Image/Video Holder */
