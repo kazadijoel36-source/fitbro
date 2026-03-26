@@ -58,5 +58,6 @@ async def read_login():
 # 5. SYSTEM_BOOT
 if __name__ == "__main__":
     import uvicorn
+    # Use the port Render gives us, or default to 10000
     port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("fitbro:app", host="0.0.0.0", port=port)
+    uvicorn.run("fitbro:app", host="0.0.0.0", port=port, reload=False)
