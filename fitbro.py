@@ -51,6 +51,10 @@ async def read_dashboard():
 async def read_fuel():
     return FileResponse('fuel.html')
 
+@app.get("/login")
+async def read_login():
+    return FileResponse('login.html')
+
 # 5. SYSTEM_BOOT
 if __name__ == "__main__":
     import uvicorn
