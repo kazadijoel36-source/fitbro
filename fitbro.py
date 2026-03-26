@@ -14,7 +14,7 @@ app = FastAPI(title="Vanguard OS")
 if not os.path.exists("static"):
     os.makedirs("static")
 # Use lowercase 'static' for compatibility
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="."), name="static")
 
 # 3. GLOBAL_SECURITY_CORS
 app.add_middleware(
