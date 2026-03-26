@@ -2,65 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FITBRO | VANGUARD_OS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vanguard OS | Command Your Physique</title>
     <link rel="stylesheet" href="/static/landing-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="loader">
-        <div class="boot-sequence">
-            <p>> INITIALIZING VANGUARD_OS...</p>
-            <p>> SYNCING BIOMETRIC_HUB...</p>
-            <p>> CALIBRATING NUTRITION_ENGINE...</p>
-            <p>> SYSTEM ONLINE.</p>
-        </div>
-    </div>
-
-    <main class="dashboard-shell" style="display:none;">
-        <header>
-            <div class="logo-area">
-                <span class="logo-text">FITBRO</span>
-                <span class="os-version">v3.0.5</span>
-            </div>
-            <div class="status-indicator">
-                <span class="pulse"></span> STATUS: OPERATIONAL
-            </div>
+<body class="gym-theme">
+    <div class="background-overlay"></div>
+    
+    <div class="main-container">
+        <header class="top-bar">
+            <span class="logo-text">⚡ FITBRO</span>
+            <span class="os-version">VANGUARD<span class="accent">OS</span></span>
         </header>
 
-        <section class="hero-tactical">
-            <h1 class="main-title">COMMAND YOUR <br><span class="highlight">PHYSIQUE.</span></h1>
-            
-            <div class="command-grid">
-                <div class="grid-item"><span class="code">[01]</span> NUTRITION_AI</div>
-                <div class="grid-item"><span class="code">[02]</span> WORKOUT_LOG</div>
-                <div class="grid-item"><span class="code">[03]</span> BIO_TRACKER</div>
+        <div class="hero-content">
+            <div class="review-badge">
+                <span class="stars">★★★★★</span>
+                <span class="review-count">150K+ REVIEWS</span>
             </div>
+            <h1>YOUR TRAINING PLAN FOR <span class="glow">MAX RESULTS</span></h1>
+        </div>
 
-            <div class="pricing-card">
-                <div class="price-header">
-                    <span class="tier">ACCESS: FULL_VERSION</span>
-                    <span class="amt">R50 / MO</span>
-                </div>
-                <div class="trial-badge">14-DAY SYSTEM TRIAL ENABLED</div>
-            </div>
-
-            <button class="action-btn" onclick="window.location.href='/onboarding'">
-                INITIALIZE INDUCTION
+        <div class="footer-action">
+            <button class="start-btn" onclick="window.location.href='/onboarding'">
+                START
             </button>
-            
-            <p class="footer-msg">BUILT FOR THE 1%. CANCEL ANYTIME.</p>
-        </section>
-    </main>
-
-    <script>
-        // Fake Boot Logic to mask Render spin-up
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                document.querySelector('.dashboard-shell').style.display = 'block';
-            }, 2500);
-        });
-    </script>
+        </div>
+    </div>
 </body>
 </html>
