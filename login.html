@@ -1,160 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Vanguard">
     <meta charset="UTF-8">
-    <title>Vanguard OS | Auth Terminal</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles.css">
-<script src="dash-master.js"></script>
-
-<link rel="stylesheet" href="/static/styles.css">
-<script src="/static/dash-master.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #00ffa3; --bg: #000; --card: #0d0d0d; --border: #1a1a1a; }
-        body { 
-            display: flex; align-items: center; justify-content: center; 
-            height: 100vh; margin: 0; background: var(--bg);
-            font-family: 'JetBrains Mono', monospace; color: white;
-            overflow: hidden;
-        }
-        .auth-card {
-            width: 90%; max-width: 400px; padding: 40px; text-align: center;
-            background: var(--card); border: 1px solid var(--border);
-            clip-path: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 10% 100%, 0 90%);
-        }
-        input {
-            width: 100%; background: #080808; border: 1px solid #151515;
-            padding: 15px; color: var(--primary); font-family: 'JetBrains Mono';
-            margin-bottom: 20px; outline: none; transition: 0.3s;
-        }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
-        .mono-tag { font-size: 0.6rem; color: #444; letter-spacing: 2px; display: block; margin-bottom: 8px; text-align: left; }
-        .btn-main {
-            background: var(--primary); color: #000; border: none;
-            padding: 18px; width: 100%; font-family: 'Archivo Black';
-            cursor: pointer; transition: 0.3s; clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
-        }
-        .btn-main:active { transform: scale(0.98); }
-        .toggle-text { font-size: 0.7rem; color: #444; cursor: pointer; margin-top: 25px; }
-        .toggle-text b { color: var(--primary); }
-        #custom-cursor {
-            position: fixed; width: 10px; height: 10px; background: var(--primary);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            box-shadow: 0 0 15px var(--primary); transform: translate(-50%, -50%);
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FITBRO | ACCESS</title>
+    <link rel="stylesheet" href="static/landing-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div id="custom-cursor"></div>
+<body class="gym-theme">
+    <div class="background-overlay"></div>
+    
+    <div class="main-container">
+        <header class="top-bar">
+            <img src="static/logo.png" alt="FITBRO" style="height: 40px;">
+            <span class="os-version">AUTH_GATE_<span class="accent">01</span></span>
+        </header>
 
-    <div class="auth-card">
-        <span class="mono-tag" id="status-tag">SECURE_LINK_AWAITING</span>
-        <h1 id="m-title" style="font-family:'Archivo Black'; color:var(--primary); margin: 10px 0 30px; font-size: 1.8rem;">VANGUARD_AUTH</h1>
-        
-        <div id="signup-fields" style="display: none; text-align: left;">
-            <span class="mono-tag">Operative_Full_Name</span>
-            <input type="text" id="full_name" placeholder="E.G. JOEL KAZADI">
+        <div class="auth-box">
+            <div class="tabs">
+                <button id="login-tab" class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
+                <button id="signup-tab" class="tab-btn" onclick="switchTab('signup')">SIGNUP</button>
+            </div>
+
+            <h2 id="auth-title">WELCOME BACK</h2>
+            <p id="auth-sub">Enter your credentials to sync.</p>
+
+            <form id="auth-form" class="tactical-form">
+                <div class="input-group">
+                    <label>EMAIL_ADDRESS</label>
+                    <input type="email" placeholder="name@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label>ACCESS_KEY</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                
+                <div id="signup-only" style="display:none;">
+                    <div class="price-notice">
+                        <span>R50/MO AFTER 14-DAY TRIAL</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="start-btn">INITIALIZE</button>
+            </form>
         </div>
 
-        <span class="mono-tag">Operative_Email</span>
-        <input type="email" id="email" placeholder="ENTER EMAIL">
-         
-        <span class="mono-tag">Access_Cipher</span>
-        <input type="password" id="pass" placeholder="ENTER PASSWORD">
-
-        <button onclick="executeAuth()" class="btn-main" id="auth-btn">INITIALIZE_LINK</button>
-        
-        <p class="toggle-text" onclick="toggleMode()" id="toggle-label">
-            NEW RECRUIT? <b>ENLIST_HERE</b>
-        </p>
+        <div class="footer-action">
+            <a href="/" class="back-link">← BACK TO SYSTEM START</a>
+        </div>
     </div>
 
     <script>
-        let isSignup = false;
-        // SMART_URL: Detects if running on ProBook (Localhost) or Render
-        const API_URL = window.location.hostname.includes("render.com")
-            ? "https://fitbro-os.onrender.com" 
-            : "http://127.0.0.1:8000";
-            const endpoint = isSignup ? `${API_URL}/api/register` : `${API_URL}/login`;
+        function switchTab(type) {
+            const loginBtn = document.getElementById('login-tab');
+            const signupBtn = document.getElementById('signup-tab');
+            const title = document.getElementById('auth-title');
+            const sub = document.getElementById('auth-sub');
+            const signupExtra = document.getElementById('signup-only');
 
-        function toggleMode() {
-            isSignup = !isSignup;
-            const title = document.getElementById('m-title');
-            const btn = document.getElementById('auth-btn');
-            const label = document.getElementById('toggle-label');
-            const status = document.getElementById('status-tag');
-            const signupFields = document.getElementById('signup-fields');
-
-            if (isSignup) {
-                title.innerText = "VANGUARD_ENLIST";
-                btn.innerText = "CREATE_OPERATIVE_ID";
-                label.innerHTML = "EXISTING OPERATIVE? <b>AUTH_LOGIN</b>";
-                status.innerText = "NEW_ENLISTMENT_PENDING";
-                signupFields.style.display = "block";
+            if (type === 'login') {
+                loginBtn.classList.add('active');
+                signupBtn.classList.remove('active');
+                title.innerText = 'WELCOME BACK';
+                sub.innerText = 'Enter your credentials to sync.';
+                signupExtra.style.display = 'none';
             } else {
-                title.innerText = "VANGUARD_AUTH";
-                btn.innerText = "INITIALIZE_LINK";
-                label.innerHTML = "NEW RECRUIT? <b>ENLIST_HERE</b>";
-                status.innerText = "SECURE_LINK_AWAITING";
-                signupFields.style.display = "none";
+                signupBtn.classList.add('active');
+                loginBtn.classList.remove('active');
+                title.innerText = 'CREATE PROFILE';
+                sub.innerText = 'Join the 1%. 14-day trial included.';
+                signupExtra.style.display = 'block';
             }
         }
-
-        async function executeAuth() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('pass').value;
-            const fullName = document.getElementById('full_name').value;
-            const btn = document.getElementById('auth-btn');
-
-            if (!email || !password) return alert("CRITICAL: Input Required.");
-
-            btn.innerText = "SYNCING...";
-            btn.disabled = true;
-
-            const endpoint = isSignup ? `${AUTH_API}/api/register` : `${AUTH_API}/login`;
-            
-            try {
-                const res = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        username: email, 
-                        password: password,
-                        full_name: isSignup ? fullName : null 
-                    })
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    // Save User ID for modular sync across all pages
-                    localStorage.setItem('fitbro_user_id', data.id || data.user_id || "1");
-                    window.location.href = isSignup ? "onboarding.html" : "dashboard.html";
-                } else {
-                    alert(`ACCESS_DENIED: ${data.detail || "Invalid Cipher"}`);
-                    btn.innerText = isSignup ? "CREATE_OPERATIVE_ID" : "INITIALIZE_LINK";
-                    btn.disabled = false;
-                }
-            } catch (e) {
-                console.error("LINK_FAILURE:", e);
-                alert("SYSTEM_OFFLINE: Backend link severed.");
-                btn.disabled = false;
-            }
-        }
-
-        // Custom Cursor HUD
-        document.addEventListener('mousemove', (e) => {
-            const c = document.getElementById('custom-cursor');
-            if(c) {
-                c.style.left = e.clientX + 'px';
-                c.style.top = e.clientY + 'px';
-            }
-        });
     </script>
 </body>
 </html>
